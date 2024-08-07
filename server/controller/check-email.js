@@ -15,7 +15,7 @@ async function checkEmail(req, res) {
 
         return res.status(200).json({
             message: "Email verify.",
-            succes: true,
+            success: true,
             data: checkEmail
         })
 

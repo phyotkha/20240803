@@ -16,7 +16,7 @@ router.post('/verify-email', checkEmail);
 
 router.post('/verify-password', checkPassword);
 
-router.post('/user-details', userDetails);
+router.get('/user-details', userDetails);
 
 router.get('/logout', logout);
 
