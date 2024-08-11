@@ -7,9 +7,9 @@ import connectDB from "./db/mongodb-connection.js";
 
 import routes from "./routes/index.js";
 
-dotenv.config();
+import {app, server} from "./socket/index.js";
 
-const app = express();
+dotenv.config();
 
 // CORS middleware configuration
 app.use(cors({
@@ -25,7 +25,7 @@ app.use('/api/', routes);
 const PORT = process.env.PORT || 8080;
 
 connectDB().then(() => {
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
         console.log(`Server running on http://localhost:${PORT}`);
     })
 })

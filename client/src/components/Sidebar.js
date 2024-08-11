@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { IoChatbubblesSharp } from "react-icons/io5";
+import { FiArrowUpLeft } from "react-icons/fi";
 import { FaUserPlus } from "react-icons/fa";
 import { NavLink, useNavigate } from 'react-router-dom';
 import { IoLogOutSharp } from "react-icons/io5";
@@ -7,11 +8,13 @@ import Avatar from "./Avatar";
 import { useDispatch, useSelector } from 'react-redux';
 import EditUserDetails from './EditUserDetails';
 import { logout } from '../app/UserSlice';
+import SearchUser from './SearchUser';
 
 const Sidebar = () => {
     const user = useSelector(state => state?.user);
     const [editUserOpen, setEditUserOpen] = useState(false);
     const [allUser, setAllUser] = useState([]);
+    const [openSearchUser, setOpenSearchUser] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -29,7 +32,7 @@ const Sidebar = () => {
                         <IoChatbubblesSharp size={25} />
                     </NavLink>
 
-                    <div title='add friend' className={`w-12 h-12 flex justify-center items-center cursor-pointer hover:bg-slate-300 rounded`}>
+                    <div title='add friend' onClick={() => setOpenSearchUser(true)} className={`w-12 h-12 flex justify-center items-center cursor-pointer hover:bg-slate-300 rounded`}>
                         <FaUserPlus size={25} />
                     </div>
                 </div>
@@ -59,17 +62,29 @@ const Sidebar = () => {
                     {
                         allUser.length === 0 && (
                             <div className='mt-12'>
-                                <div>
+                                <div className='flex justify-center items center my-4 text-slate-500'>
+                                    <FiArrowUpLeft size={40} />
                                 </div>
+                                <p className='text-lg text-center text-slate-400'>
+                                    Explore users to start a conversation with.
+                                </p>
                             </div>
                         )
                     }
                 </div>
             </div>
-
+            
+            {/* Edit User Details */}
             {
                 editUserOpen && (
                     <EditUserDetails onClose={() => setEditUserOpen(false)} userData={user} />
+                )
+            }
+
+            {/* Search User */}
+            {
+                openSearchUser && (
+                    <SearchUser onClose={() => setOpenSearchUser(false)} loggedInUserId={user._id} />
                 )
             }
         </div>

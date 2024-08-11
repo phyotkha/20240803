@@ -2,9 +2,10 @@ import React, { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, setUser } from '../app/UserSlice';
+import { logout, setUser, setOnlineUser } from '../app/UserSlice';
 import Sidebar from '../components/Sidebar';
-import logo from '../public/logo.png'
+import logo from '../public/logo.png';
+import io from "socket.io-client";
 
 const HomePage = () => {
 
@@ -39,6 +40,24 @@ const HomePage = () => {
   useEffect(() => {
     fetchUserDetails()
   }, [])
+
+  // Socket Connection 
+  useEffect(() => {
+    const socketConnection = io(process.env.REACT_APP_BACKEND_URL, {
+      auth: {
+        token: localStorage.getItem('token')
+      }
+    })
+
+    socketConnection.on('OnlineUser', (data) => {
+      console.log(data);
+      dispatch(setOnlineUser(data))
+    })
+
+    return () => {
+      socketConnection.disconnect();
+    }
+  })
 
   const basePath = location.pathname === '/';
 
